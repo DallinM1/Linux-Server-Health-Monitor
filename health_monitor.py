@@ -69,10 +69,9 @@ def health_check():
     check_memory_usage(80, 90)
     mounts = get_mounts("/etc/healthcheck/mounts.yaml")
     for mount in mounts:
-        check_mount(mount)
+        check_mount(mount["path"])
 
 if __name__ == "__main__":
     while True:
         health_check()
-        time.sleep(60)
         time.sleep(60)
