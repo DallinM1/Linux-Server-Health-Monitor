@@ -2,6 +2,7 @@ import psutil
 import os
 import time
 import logging
+import yaml
 from datetime import datetime
 
 logging.basicConfig(
@@ -17,6 +18,11 @@ def get_disk_usage():
         u = psutil.disk_usage(part.mountpoint).percent
         usage_list.append((part, u))
     return usage_list
+
+def get_mounts(mounts_path):
+    with open(mounts_path, "r") as f:
+        config = yaml.safe_load(f)
+    return config.get("mounts", [])
 
 def check_disk_usage(warning_flag, critical_flag):
     disk_usage_list = get_disk_usage()
@@ -61,8 +67,12 @@ def health_check():
     check_disk_usage(80, 90)
     check_cpu_usage(80, 90)
     check_memory_usage(80, 90)
+    mounts = get_mounts("/etc/healthcheck/mounts.yaml")
+    for mount in mounts:
+        check_mount(mount)
 
 if __name__ == "__main__":
     while True:
         health_check()
+        time.sleep(60)
         time.sleep(60)
