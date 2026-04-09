@@ -1,0 +1,9 @@
+# /etc/healthcheck/config.yaml
+ 
+thresholds:
+  warning: 80
+  critical: 90
+ 
+mounts:
+  - path: /mnt/data
+  - path: /mnt/backup
